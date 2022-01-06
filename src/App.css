@@ -54,3 +54,15 @@
   background: #b6aa05;
   font-size: 20px;
 }
+.waveCount{
+  margin-top: 24px;
+  text-align: center;
+}
+.waveCounter{
+  padding: 10px;
+  color: #4869c2;
+  font-size: 16px;;
+  background: #ffffff;
+  border-radius: 10px;
+  font-weight: lighter;
+}

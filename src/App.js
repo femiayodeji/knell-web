@@ -5,6 +5,7 @@ import WavePortalABI from "./utils/WavePortal.json";
 
 export default function App() {
   const [currentAccount, setCurrentAccount] = useState("");
+  const [waveCount, setWaveCount] = useState(0);
 
   const contractAddress = "0x6d61c51541d01DbC3E44825846E54B3Bea0cD21f";
   const contractABI = WavePortalABI.abi;
@@ -27,6 +28,7 @@ export default function App() {
         const account = accounts[0];
         console.log("Found an authorized account:", account);
         setCurrentAccount(account);
+        getWaveCount();
       }
     } catch(error){
       console.log(error);
@@ -46,6 +48,7 @@ export default function App() {
 
       console.log("Connected", accounts[0]);
       setCurrentAccount(accounts[0]);
+      getWaveCount();
     } catch (error) {
       console.log(error)
     }
@@ -71,6 +74,26 @@ export default function App() {
 
         count = await wavePortalContract.getTotalWaves();
         console.log("Retrieved total wave count...", count.toNumber());
+        setWaveCount(count.toNumber());
+      } else {
+        console.log("Ethereum object doesn't exist!");
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  const getWaveCount = async () => {
+    try{
+      const {ethereum} = window;
+
+      if(ethereum){
+        const provider = new ethers.providers.Web3Provider(ethereum);
+        const signer = provider.getSigner();
+        const wavePortalContract = new ethers.Contract(contractAddress, contractABI, signer);
+
+        let count = await wavePortalContract.getTotalWaves();
+        setWaveCount(count.toNumber());
       } else {
         console.log("Ethereum object doesn't exist!");
       }
@@ -92,6 +115,13 @@ export default function App() {
             <span role="img" aria-label="wave">👋</span> Knell
           </div>
 
+          <div className="waveCount">
+            <span className="waveCounter">
+              {waveCount}
+              <span role="img" aria-label="wave">👋</span>
+            </span>
+          </div>
+        
           <div className="bio">
             <p>After a while, just staying alive becomes a full-time job. No wonder we need a vacation.</p> 
             <p>Connect your Ethereum wallet and wave at those that're still un-dead!</p>
