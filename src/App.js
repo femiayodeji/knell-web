@@ -23,7 +23,7 @@ async function getWaveCount() {
 export default function App() {
   const [currentAccount, setCurrentAccount] = useState("");
   const [waveCount, setWaveCount] = useState(0);
-  const [waveText, setWaveText] = useState("Wave");
+  const [waveStatusText, setWaveStatusText] = useState("Wave");
 
   const checkIfWalletIsConnected = async () => {
     try{
@@ -85,17 +85,17 @@ export default function App() {
 
         const waveTxn = await wavePortalContract.wave();
         console.log("Mining..", waveTxn.hash);
-        setWaveText("Waving..");
+        setWaveStatusText("Waving..");
         await waveTxn.wait();
         console.log("Mined -- ", waveTxn.hash);
-        setWaveText("Waved");
+        setWaveStatusText("Waved");
 
         count = await wavePortalContract.getTotalWaves();
         console.log("Retrieved total wave count...", count.toNumber());
         setWaveCount(count.toNumber());
         
         setTimeout(()=>{
-          setWaveText("Wave again");
+          setWaveStatusText("Wave again");
         }, 2000);
 
       } else {
@@ -133,7 +133,7 @@ export default function App() {
 
           {currentAccount && (
             <button className="waveButton" onClick={wave}>
-              {waveText}
+              {waveStatusText}
             </button>
           )}
 
