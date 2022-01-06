@@ -9,22 +9,24 @@ export default function App() {
   }
   
   return (
-    <div className="mainContainer">
+    <div className="page-wrapper">
+      <div className="mainContainer">
 
-      <div className="dataContainer">
-        <div className="header">
-          <span role="img" aria-label="sheep">👋</span> Knell
+        <div className="dataContainer">
+          <div className="header">
+            <span role="img" aria-label="wave">👋</span> Knell
+          </div>
+
+          <div className="bio">
+            <p>After a while, just staying alive becomes a full-time job. No wonder we need a vacation.</p> 
+            <p>Connect your Ethereum wallet and wave at those that're still un-dead!</p>
+          </div>
+
+          <button className="waveButton" onClick={wave}>
+            Wave at the living
+          </button>
         </div>
-
-        <div className="bio">
-          After a while, just staying alive becomes a full-time job. No wonder we need a vacation. 
-          <p>Connect your Ethereum wallet and wave at those that're still un-dead!</p>
-        </div>
-
-        <button className="waveButton" onClick={wave}>
-          Wave at the living
-        </button>
-      </div>
+      </div>      
     </div>
   );
 }

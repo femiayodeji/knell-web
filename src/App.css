@@ -1,8 +1,16 @@
+.page-wrapper{
+  height: 100vh;
+  margin: 0;
+  background: url(./assets/img/aurora.jpg);
+}
 .mainContainer {
   display: flex;
   justify-content: center;
   width: 100%;
-  margin-top: 64px;
+  height: 100vh;
+  margin: 0;
+  background: rgba(0, 0, 0, 0.2);
+  color: #ffffff;
 }
 
 .dataContainer {
@@ -10,18 +18,24 @@
   flex-direction: column;
   justify-content: center;
   max-width: 600px;
+  margin: 24px;
+  padding: 32px;
+  background: rgba(255, 255, 255, 0.55);
 }
 
 .header {
   text-align: center;
   font-size: 32px;
   font-weight: 600;
+  text-shadow: 1px 1px 1px #000000;
 }
 
 .bio {
   text-align: center;
-  color: gray;
   margin-top: 16px;
+}
+.bio p{
+  color: #000000;
 }
 
 .waveButton {
@@ -30,5 +44,6 @@
   padding: 8px;
   border: 0;
   border-radius: 5px;
-  
+  background: #d6c807;
+  color: #ffffff;
 }
