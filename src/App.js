@@ -5,7 +5,7 @@ import './App.css';
 export default function App() {
 
   const wave = () => {
-    
+    console.log(ethers);
   }
   
   return (
@@ -13,15 +13,16 @@ export default function App() {
 
       <div className="dataContainer">
         <div className="header">
-        👋 Hey there!
+          <span role="img" aria-label="sheep">👋</span> Knell
         </div>
 
         <div className="bio">
-        I am farza and I worked on self-driving cars so that's pretty cool right? Connect your Ethereum wallet and wave at me!
+          After a while, just staying alive becomes a full-time job. No wonder we need a vacation. 
+          <p>Connect your Ethereum wallet and wave at those that're still un-dead!</p>
         </div>
 
         <button className="waveButton" onClick={wave}>
-          Wave at Me
+          Wave at the living
         </button>
       </div>
     </div>
