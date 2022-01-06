@@ -5,6 +5,8 @@ import './App.css';
 export default function App() {
   const [currentAccount, setCurrentAccount] = useState("");
 
+  const contractAddress = "0x6d61c51541d01DbC3E44825846E54B3Bea0cD21f";
+  
   const checkIfWalletIsConnected = async () => {
     try{
       const {ethereum} = window;
