@@ -1,13 +1,21 @@
-import * as React from "react";
-import { ethers } from "ethers";
+import React, {useEffect} from "react";
 import './App.css';
 
 export default function App() {
+  const checkIfWalletIsConnected = () => {
+    const {ethereum} = window;
 
-  const wave = () => {
-    console.log(ethers);
+    if(ethereum){
+      console.log("Make sure you have metamask!");
+    } else {
+      console.log("We have the ethereum object", ethereum);
+    }
   }
   
+  useEffect(() => {
+    checkIfWalletIsConnected();
+  }, []);
+
   return (
     <div className="page-wrapper">
       <div className="mainContainer">
@@ -22,7 +30,7 @@ export default function App() {
             <p>Connect your Ethereum wallet and wave at those that're still un-dead!</p>
           </div>
 
-          <button className="waveButton" onClick={wave}>
+          <button className="waveButton" onClick={null}>
             Wave
           </button>
         </div>
