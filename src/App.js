@@ -95,8 +95,12 @@ export default function App() {
 
       console.log("Connected", accounts[0]);
       setCurrentAccount(accounts[0]);
+
       const count = await getWaveCount();
       setWaveCount(count);
+
+      const waves = await getAllWaves();
+      setAllWaves(waves);
     } catch (error) {
       console.log(error)
     }
@@ -202,7 +206,7 @@ export default function App() {
           </div>
 
           {currentAccount && (
-            <div className="waveInput">
+            <>
               <input 
                 type="text" 
                 placeholder="..drop a message and wave" 
@@ -211,13 +215,13 @@ export default function App() {
                 value={waveMessage}
               />
               <button 
-                className="waveButton sideWave" 
+                className="waveButton" 
                 onClick={wave} 
                 disabled={waveStatus || waveMessage.trim().length <= 0}
               >
                 {waveStatusText}
               </button>
-            </div>
+            </>
           )}
 
           {!currentAccount && (
