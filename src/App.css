@@ -62,7 +62,6 @@
   color: #ffffff;
   font-size: 28px;
   transition: 0.5s;
-  width: 30%;
 }
 
 .waveButton:hover:enabled{
@@ -72,6 +71,9 @@
 .waveButton:disabled {
   cursor: inherit;
   background: #d3cc6d;
+}
+
+.sideWave{
 }
 
 .waveCount{

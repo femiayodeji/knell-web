@@ -211,7 +211,7 @@ export default function App() {
                 value={waveMessage}
               />
               <button 
-                className="waveButton" 
+                className="waveButton sideWave" 
                 onClick={wave} 
                 disabled={waveStatus || waveMessage.trim().length <= 0}
               >
