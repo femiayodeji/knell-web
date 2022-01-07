@@ -50,10 +50,15 @@
   transition: 0.5s;
   height: 50px;
 }
-.waveButton:hover{
+.waveButton:hover:enabled{
   background: #b6aa05;
   font-size: 20px;
 }
+.waveButton:disabled {
+  cursor: wait;
+  background: #d3cc6d;
+}
+
 .waveCount{
   margin-top: 24px;
   text-align: center;

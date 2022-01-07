@@ -24,6 +24,7 @@ export default function App() {
   const [currentAccount, setCurrentAccount] = useState("");
   const [waveCount, setWaveCount] = useState(0);
   const [waveStatusText, setWaveStatusText] = useState("Wave");
+  const [waveStatus, setWaveStatus] = useState(false);
   const [allWaves, setAllWaves] = useState([]);
 
   const checkIfWalletIsConnected = async () => {
@@ -46,7 +47,7 @@ export default function App() {
         setCurrentAccount(account);
         const count = await getWaveCount();
         setWaveCount(count);
-        getAllWaves();
+        await getAllWaves();
       }
     } catch(error){
       console.log(error);
@@ -88,17 +89,18 @@ export default function App() {
         const waveTxn = await wavePortalContract.wave("This is a testing message");
         console.log("Mining..", waveTxn.hash);
         setWaveStatusText("Waving..");
+        setWaveStatus(true);
         await waveTxn.wait();
         console.log("Mined -- ", waveTxn.hash);
         setWaveStatusText("Waved");
+        setWaveStatus(false);
 
         count = await wavePortalContract.getTotalWaves();
         console.log("Retrieved total wave count...", count.toNumber());
         setWaveCount(count.toNumber());
-        
-        setTimeout(()=>{
-          setWaveStatusText("Wave again");
-        }, 2000);
+
+        await getAllWaves();
+        setWaveStatusText("Wave again");
 
       } else {
         console.log("Ethereum object doesn't exist!");
@@ -162,7 +164,7 @@ export default function App() {
           </div>
 
           {currentAccount && (
-            <button className="waveButton" onClick={wave}>
+            <button className="waveButton" onClick={wave} disabled={waveStatus}>
               {waveStatusText}
             </button>
           )}
