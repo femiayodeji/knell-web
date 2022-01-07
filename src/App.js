@@ -46,6 +46,7 @@ export default function App() {
         setCurrentAccount(account);
         const count = await getWaveCount();
         setWaveCount(count);
+        getAllWaves();
       }
     } catch(error){
       console.log(error);
@@ -84,7 +85,7 @@ export default function App() {
         let count = await wavePortalContract.getTotalWaves();
         console.log("Retrieved total wave count...", count.toNumber())
 
-        const waveTxn = await wavePortalContract.wave();
+        const waveTxn = await wavePortalContract.wave("This is a testing message");
         console.log("Mining..", waveTxn.hash);
         setWaveStatusText("Waving..");
         await waveTxn.wait();
@@ -167,10 +168,21 @@ export default function App() {
           )}
 
           {!currentAccount && (
-          <button className="waveButton" onClick={connectWallet}>
-            Connect Wallet
-          </button>
-        )}
+            <button className="waveButton" onClick={connectWallet}>
+              Connect Wallet
+            </button>
+          )}
+
+          <div className="waves">
+            {allWaves.map((wave, index) => {
+              return (
+                <div key={index} className="waveItem">
+                  <div><strong>Message: {wave.message}</strong></div>
+                  <div>Address: {wave.address}</div>
+                  <div>Time: {wave.timestamp.toString()}</div>
+                </div>)
+            })}
+          </div>
 
         </div>
       </div>      
