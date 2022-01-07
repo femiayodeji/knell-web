@@ -3,7 +3,7 @@ import React, {useEffect, useState} from "react";
 import './App.css';
 import WavePortalABI from "./utils/WavePortal.json";
 
-const contractAddress = "0x4C2354ED4E0cAF14E7d925F86849487fa467302b";
+const contractAddress = "0x4B6B0776A166036F8f2d0d1bb6cCcc19d2F6A332";
 const contractABI = WavePortalABI.abi;
 
 async function getWaveCount() {
@@ -21,22 +21,20 @@ async function getWaveCount() {
 }
 
 const getAllWaves = async () => {
+  const { ethereum } = window;
   try {
-    const { ethereum } = window;
     if (ethereum) {
       const provider = new ethers.providers.Web3Provider(ethereum);
       const signer = provider.getSigner();
       const wavePortalContract = new ethers.Contract(contractAddress, contractABI, signer);
-
       const waves = await wavePortalContract.getAllWaves();
 
-      let wavesCleaned = [];
-      waves.forEach(wave => {
-        wavesCleaned.push({
+      let wavesCleaned = waves.map(wave => {
+       return {
           address: wave.waver,
           timestamp: new Date(wave.timestamp * 1000),
           message: wave.message
-        });
+        };
       });
       wavesCleaned.reverse();
       return wavesCleaned;
@@ -50,6 +48,7 @@ const getAllWaves = async () => {
 
 export default function App() {
   const [currentAccount, setCurrentAccount] = useState("");
+  const [waveMessage, setWaveMessage] = useState("");
   const [waveCount, setWaveCount] = useState(0);
   const [waveStatusText, setWaveStatusText] = useState("Wave");
   const [waveStatus, setWaveStatus] = useState(false);
@@ -115,63 +114,71 @@ export default function App() {
         let count = await wavePortalContract.getTotalWaves();
         console.log("Retrieved total wave count...", count.toNumber())
 
-        const waveTxn = await wavePortalContract.wave("This is a testing message");
+        const waveTxn = await wavePortalContract.wave(waveMessage, { gasLimit: 300000 });
         console.log("Mining..", waveTxn.hash);
         setWaveStatusText("Waving..");
         setWaveStatus(true);
         await waveTxn.wait();
+
         console.log("Mined -- ", waveTxn.hash);
         setWaveStatusText("Waved");
         setWaveStatus(false);
+        setWaveMessage("");
 
         count = await wavePortalContract.getTotalWaves();
         console.log("Retrieved total wave count...", count.toNumber());
         setWaveCount(count.toNumber());
         
-        const waves = await getAllWaves();
-        setAllWaves(waves);
-
         setWaveStatusText("Wave again");
 
       } else {
         console.log("Ethereum object doesn't exist!");
       }
     } catch (error) {
+      setWaveStatusText("Wave");
+      setWaveStatus(false);
       console.log(error);
     }
   }
 
-  // const getAllWaves = async () => {
-  //   try {
-  //     const { ethereum } = window;
-  //     if (ethereum) {
-  //       const provider = new ethers.providers.Web3Provider(ethereum);
-  //       const signer = provider.getSigner();
-  //       const wavePortalContract = new ethers.Contract(contractAddress, contractABI, signer);
-
-  //       const waves = await wavePortalContract.getAllWaves();
-
-  //       let wavesCleaned = [];
-  //       waves.forEach(wave => {
-  //         wavesCleaned.push({
-  //           address: wave.waver,
-  //           timestamp: new Date(wave.timestamp * 1000),
-  //           message: wave.message
-  //         });
-  //       });
-  //       wavesCleaned.reverse();
-  //       setAllWaves(wavesCleaned);
-  //     } else {
-  //       console.log("Ethereum object doesn't exist!")
-  //     }
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // }
+  const handleChange = (e) => {
+    setWaveMessage(e.target.value);
+  }
 
   useEffect(() => {
     checkIfWalletIsConnected();
-}, []);
+  }, []);
+
+  useEffect(() => {
+    let wavePortalContract;
+  
+    const onNewWave = (from, timestamp, message) => {
+      console.log("NewWave", from, timestamp, message);
+      
+      setAllWaves(prevState => [
+        {
+          address: from,
+          timestamp: new Date(timestamp * 1000),
+          message: message,
+        },
+        ...prevState
+      ]);
+    };
+  
+    if (window.ethereum) {
+      const provider = new ethers.providers.Web3Provider(window.ethereum);
+      const signer = provider.getSigner();
+  
+      wavePortalContract = new ethers.Contract(contractAddress, contractABI, signer);
+      wavePortalContract.on("NewWave", onNewWave);
+    }
+  
+    return () => {
+      if (wavePortalContract) {
+        wavePortalContract.off("NewWave", onNewWave);
+      }
+    };
+  }, []);
 
   return (
     <div className="page-wrapper">
@@ -195,9 +202,22 @@ export default function App() {
           </div>
 
           {currentAccount && (
-            <button className="waveButton" onClick={wave} disabled={waveStatus}>
-              {waveStatusText}
-            </button>
+            <div className="waveInput">
+              <input 
+                type="text" 
+                placeholder="..drop a message and wave" 
+                className="waveText"
+                onChange={handleChange}
+                value={waveMessage}
+              />
+              <button 
+                className="waveButton" 
+                onClick={wave} 
+                disabled={waveStatus || waveMessage.trim().length <= 0}
+              >
+                {waveStatusText}
+              </button>
+            </div>
           )}
 
           {!currentAccount && (

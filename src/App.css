@@ -38,9 +38,23 @@
   color: #000000;
 }
 
+.waveText {
+  margin-top: 16px;
+  padding: 8px;
+  border: 0;
+  border-radius: 5px;
+  text-align: center;
+  color: #4869c2;
+  font-size: 16px;
+  transition: 0.5s;
+  width: 60%;
+  height: 40px;
+}
+
 .waveButton {
   cursor: pointer;
   margin-top: 16px;
+  margin-left: 5%;
   padding: 8px;
   border: 0;
   border-radius: 5px;
@@ -48,14 +62,15 @@
   color: #ffffff;
   font-size: 28px;
   transition: 0.5s;
-  height: 50px;
+  width: 30%;
 }
+
 .waveButton:hover:enabled{
   background: #b6aa05;
   font-size: 20px;
 }
 .waveButton:disabled {
-  cursor: wait;
+  cursor: inherit;
   background: #d3cc6d;
 }
 
