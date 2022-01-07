@@ -128,7 +128,7 @@ export default function App() {
             message: wave.message
           });
         });
-
+        wavesCleaned.reverse();
         setAllWaves(wavesCleaned);
       } else {
         console.log("Ethereum object doesn't exist!")
