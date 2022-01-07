@@ -3,7 +3,7 @@ import React, {useEffect, useState} from "react";
 import './App.css';
 import WavePortalABI from "./utils/WavePortal.json";
 
-const contractAddress = "0x6d61c51541d01DbC3E44825846E54B3Bea0cD21f";
+const contractAddress = "0x454Af8344e19F423651d5A49e5003AD9d915b989";
 const contractABI = WavePortalABI.abi;
 
 async function getWaveCount() {
