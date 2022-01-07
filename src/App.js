@@ -24,6 +24,7 @@ export default function App() {
   const [currentAccount, setCurrentAccount] = useState("");
   const [waveCount, setWaveCount] = useState(0);
   const [waveStatusText, setWaveStatusText] = useState("Wave");
+  const [allWaves, setAllWaves] = useState([]);
 
   const checkIfWalletIsConnected = async () => {
     try{
@@ -100,6 +101,34 @@ export default function App() {
 
       } else {
         console.log("Ethereum object doesn't exist!");
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  const getAllWaves = async () => {
+    try {
+      const { ethereum } = window;
+      if (ethereum) {
+        const provider = new ethers.providers.Web3Provider(ethereum);
+        const signer = provider.getSigner();
+        const wavePortalContract = new ethers.Contract(contractAddress, contractABI, signer);
+
+        const waves = await wavePortalContract.getAllWaves();
+
+        let wavesCleaned = [];
+        waves.forEach(wave => {
+          wavesCleaned.push({
+            address: wave.waver,
+            timestamp: new Date(wave.timestamp * 1000),
+            message: wave.message
+          });
+        });
+
+        setAllWaves(wavesCleaned);
+      } else {
+        console.log("Ethereum object doesn't exist!")
       }
     } catch (error) {
       console.log(error);
